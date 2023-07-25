@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const app = require("./app");
 
 const MONGO_URL =
-  "mongodb://mari4ka62:1234@cluster0.tdyitsv.mongodb.net/db-contacts";
+  "mongodb+srv://mari4ka62:1234@cluster0.tdyitsv.mongodb.net/db-contacts?retryWrites=true&w=majority";
 
 mongoose.set("strictQuery", true);
 
