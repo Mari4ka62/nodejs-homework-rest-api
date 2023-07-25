@@ -1,16 +1,12 @@
-const { Types } = require("mongoose");
+const { isValidObjectId } = require("mongoose");
 
-// const validationSchema = require("../utils/contactValidator");
 const wrapper = require("../utils/ctrlWrapper");
 const httpError = require("../utils/httpError");
 
-const checkContactId = wrapper(async (req, res, next) => {
-  const { id } = req.params;
-
-  const idIsValid = Types.ObjectId.isValid(id);
-
-  if (!idIsValid) throw new httpError(404, "User does not exist..");
-
+const checkContactId = wrapper((req, res, next) => {
+  if (!isValidObjectId(req.params.contactId)) {
+    next(httpError(400, `${req.params.contactId} is not valid id`));
+  }
   next();
 });
 module.exports = checkContactId;

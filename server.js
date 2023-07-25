@@ -2,8 +2,7 @@ const mongoose = require("mongoose");
 
 const app = require("./app");
 
-const MONGO_URL =
-  "mongodb+srv://mari4ka62:1234@cluster0.tdyitsv.mongodb.net/db-contacts?retryWrites=true&w=majority";
+const { MONGO_URL, PORT = 3000 } = process.env;
 
 mongoose.set("strictQuery", true);
 
@@ -12,8 +11,8 @@ mongoose
   .then(() => {
     console.log("Database connection successful");
 
-    app.listen(3000, () => {
-      console.log("Server running. Use our API on port:", 3000);
+    app.listen(PORT, () => {
+      console.log("Server running. Use our API on port:", PORT);
     });
   })
   .catch((error) => {
