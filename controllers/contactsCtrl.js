@@ -1,54 +1,42 @@
-const Joi = require("joi");
+const { schema, updateFavouriteSchema } = require("../utils/contactValidator");
 
-const contacts = require("../models/contacts");
+const Contact = require("../models/contactsModel");
 
 const httpError = require("../utils/httpError");
 const ctrlWrapper = require("../utils/ctrlWrapper");
 
-const schema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().required(),
-});
-
 const listContacts = async (req, res) => {
-  const result = await contacts.listContacts();
-  res.json(result);
-  console.log(result);
+  const data = await Contact.find();
+  res.json(data);
 };
-
 const getContactById = async (req, res) => {
-  const result = await contacts.getContactById(req.params.contactId);
+  const data = await Contact.findById(req.params.contactId);
 
-  if (!result) {
+  if (!data) {
     throw httpError(404, "Not found");
   }
 
-  res.json(result);
+  res.json(data);
 };
-
 const addContact = async (req, res) => {
   const { error } = schema.validate(req.body);
 
   if (error) {
     throw httpError(400, error.message);
   }
-
-  const result = await contacts.addContact(req.body);
-  res.status(201).json(result);
+  const data = await Contact.create(req.body);
+  res.json(data);
 };
 
 const removeContact = async (req, res) => {
-  const { contactId } = req.params;
-  const result = await contacts.removeContact(contactId);
+  const data = await Contact.findByIdAndRemove(req.params.contactId);
 
-  if (!result) {
+  if (!data) {
     throw httpError(404, "Not found");
   }
 
-  res.json({ message: "contact is deleted" });
+  res.json({ message: "contact deleted" });
 };
-
 const updateContact = async (req, res) => {
   const { error } = schema.validate(req.body);
 
@@ -56,20 +44,38 @@ const updateContact = async (req, res) => {
     throw httpError(400, error.message);
   }
 
-  const { contactId } = req.params;
-  const result = await contacts.updateContact(contactId, req.body);
+  const data = await Contact.findByIdAndUpdate(req.params.contactId, req.body, {
+    new: true,
+  });
 
-  if (!result) {
+  if (!data) {
     throw httpError(404, "Not found");
   }
 
-  res.json(result);
+  res.json(data);
 };
+const updateStatusContact = async (req, res) => {
+  const { error } = updateFavouriteSchema.validate(req.body);
 
+  if (error) {
+    throw httpError(400, error.message);
+  }
+
+  const data = await Contact.findByIdAndUpdate(req.params.contactId, req.body, {
+    new: true,
+  });
+
+  if (!data) {
+    throw httpError(404, "Not found");
+  }
+
+  res.json(data);
+};
 module.exports = {
   listContacts: ctrlWrapper(listContacts),
   getContactById: ctrlWrapper(getContactById),
   addContact: ctrlWrapper(addContact),
   removeContact: ctrlWrapper(removeContact),
   updateContact: ctrlWrapper(updateContact),
+  updateStatusContact: ctrlWrapper(updateStatusContact),
 };
