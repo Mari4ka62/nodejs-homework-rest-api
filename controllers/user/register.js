@@ -14,7 +14,7 @@ const register = async (req, res) => {
   const user = await User.findOne({ email });
 
   if (user) {
-    throw httpErrorttpError(409, "Email in use");
+    throw httpError(409, "Email in use");
   }
 
   const salt = await bcrypt.genSalt(10);

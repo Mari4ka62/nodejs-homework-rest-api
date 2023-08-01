@@ -5,7 +5,7 @@ const updateStatusContact = async (req, res) => {
   const { error } = contactValidator.updateFavouriteSchema.validate(req.body);
 
   if (error) {
-    throw httpError(400, error.message);
+    throw httpError(400);
   }
 
   const data = await Contact.findByIdAndUpdate(req.params.contactId, req.body, {
@@ -13,7 +13,7 @@ const updateStatusContact = async (req, res) => {
   });
 
   if (!data) {
-    throw httpError(404, "Not found");
+    throw httpError(404);
   }
 
   res.json(data);
