@@ -1,9 +1,8 @@
 const { isValidObjectId } = require("mongoose");
 
-const wrapper = require("../utils/ctrlWrapper");
-const httpError = require("../utils/httpError");
+const { ctrlWrapper, httpError } = require("../utils");
 
-const checkContactId = wrapper((req, res, next) => {
+const checkContactId = ctrlWrapper((req, res, next) => {
   if (!isValidObjectId(req.params.contactId)) {
     next(httpError(400, `${req.params.contactId} is not valid id`));
   }
