@@ -7,8 +7,10 @@ const {
   current,
   logout,
   updateSubscriptionStatus,
+  updateAvatar,
 } = require("../../controllers/user");
 const { authenticate } = require("../../middlewares/userMiddlewares");
+const upload = require("../../middlewares/avatarUpload");
 
 router.post("/register", register);
 
@@ -19,5 +21,7 @@ router.get("/current", authenticate, current);
 router.post("/logout", authenticate, logout);
 
 router.patch("/", authenticate, updateSubscriptionStatus);
+
+router.patch("/avatars", authenticate, upload.single("avatar"), updateAvatar);
 
 module.exports = router;
