@@ -8,6 +8,8 @@ const {
   logout,
   updateSubscriptionStatus,
   updateAvatar,
+  verifyEmail,
+  resendEmail,
 } = require("../../controllers/user");
 const { authenticate } = require("../../middlewares/userMiddlewares");
 const upload = require("../../middlewares/avatarUpload");
@@ -15,6 +17,10 @@ const upload = require("../../middlewares/avatarUpload");
 router.post("/register", register);
 
 router.post("/login", login);
+
+router.get("/verify/:verificationToken", verifyEmail);
+
+router.post("/verify", resendEmail);
 
 router.get("/current", authenticate, current);
 
