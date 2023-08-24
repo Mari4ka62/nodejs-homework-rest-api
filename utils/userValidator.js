@@ -16,8 +16,12 @@ const updateSubscriptionSchema = Joi.object({
     .valid(...Object.values(subscriptionList))
     .required(),
 });
+const emailSchema = Joi.object({
+  email: Joi.string().email().required(),
+});
 
 module.exports = {
   registerSchema,
   updateSubscriptionSchema,
+  emailSchema,
 };
